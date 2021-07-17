@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Chat;
+use app\models\ChatMessage;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -69,6 +71,22 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
+
+    public function actionChats($chat=null)
+    {
+        $chats = Chat::find()->all();
+            if($chat==null){
+                $chat = 10;
+            }
+
+        $messages = ChatMessage::find()->where(['chat_id'=>$chat])->orderBy('time ASC')->all();
+
+        return $this->render('chats',[
+            'chats'=>$chats,
+            'messages'=>$messages,
+        ]);
+    }
+
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
