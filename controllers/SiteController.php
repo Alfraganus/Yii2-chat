@@ -74,11 +74,8 @@ class SiteController extends Controller
 
     public function actionChats($chat=null)
     {
-        $chats = Chat::find()->all();
-            if($chat==null){
-                $chat = 10;
-            }
-
+        $userId = Yii::$app->user->id;
+        $chats = Chat::find()->where(['sender_id'=>$userId])->orWhere(['receiver_id'=>$userId])->all();
         $messages = ChatMessage::find()->where(['chat_id'=>$chat])->orderBy('time ASC')->all();
 
         return $this->render('chats',[

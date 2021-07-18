@@ -17,6 +17,7 @@ class m210717_062049_create_chat_message_table extends Migration
             'chat_id'=>$this->integer()->null(),
             'message'=>$this->text()->null(),
             'owner'=> 'ENUM(`sender`, `receiver`)',
+            'user_id'=> $this->integer()->null(),
             'time'=>$this->integer()->null()
         ]);
         $this->addForeignKey(
@@ -24,6 +25,14 @@ class m210717_062049_create_chat_message_table extends Migration
             'chat_message',
             'chat_id',
             'chat',
+            'id',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'fk-chat_message-user_id',
+            'chat_message',
+            'user_id',
+            'user',
             'id',
             'CASCADE'
         );
@@ -41,6 +50,10 @@ class m210717_062049_create_chat_message_table extends Migration
     {
         $this->dropForeignKey(
             'fk-chat_message-chat_id',
+            'chat_message',
+        );
+        $this->dropForeignKey(
+            'fk-chat_message-user_id',
             'chat_message',
         );
         $this->dropIndex(

@@ -44,12 +44,19 @@ class ChatController extends Controller
     {
         $model = new Chat();
         $chatMessage = new ChatMessage();
+
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
-            $model->receiver_id = Yii::$app->user->id;
-            $model->save(false);
-            $chatMessage->chat_id = $model->id;
-            $chatMessage->save(false);
+            $existingModel = Chat::find()->where(['receiver_id'=>intval(Yii::$app->user->id),'sender_id'=>intval($model->sender_id)]);
+            if($existingModel->exists()) {
+                return $this->redirect(['site/chats','chat'=>$existingModel->one()->id]);
+            } else {
+                $model->receiver_id = Yii::$app->user->id;
+                $model->save(false);
+                $chatMessage->chat_id = $model->id;
+                $chatMessage->save(false);
+            }
+
         }
         return $this->redirect(Yii::$app->request->referrer);
      }
@@ -57,8 +64,9 @@ class ChatController extends Controller
      public function actionWriteChat()
      {
          $model = new ChatMessage();
-         if ($model->load(Yii::$app->request->post())) {
+         if ($model->load(Yii::$app->request->post()) && $model->message !='') {
             $model->owner ='sender';
+            $model->user_id =Yii::$app->user->id;
             $model->time = time();
             $model->save(false);
          }

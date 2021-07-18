@@ -12,6 +12,7 @@ use Yii;
  * @property string|null $message
  * @property string|null $owner
  * @property int|null $time
+ * @property int|null $user_id
  *
  * @property Chat $chat
  */
@@ -31,7 +32,7 @@ class ChatMessage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['chat_id', 'time'], 'integer'],
+            [['chat_id', 'time','user_id'], 'integer'],
             [['owner', 'message'], 'string'],
             [['chat_id'], 'exist', 'skipOnError' => true, 'targetClass' => Chat::className(), 'targetAttribute' => ['chat_id' => 'id']],
         ];
@@ -55,6 +56,11 @@ class ChatMessage extends \yii\db\ActiveRecord
     {
         $chatMessage = ChatMessage::find()->where(['chat_id'=>$chat_id])->orderBy('time DESC')->one();
         return $chatMessage->message??'';
+    }
+    public static function getChatterName($user_id)
+    {
+        $chatUsername = User::find()->where(['id'=>$user_id])->one();
+        return $chatUsername->username??'Username not found!';
     }
 
     /**

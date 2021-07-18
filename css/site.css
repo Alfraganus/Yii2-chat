@@ -126,7 +126,7 @@ img{ max-width:100%;}
     position: absolute;
     right: 0;
     top: 11px;
-    width: 33px;
+    width: 100px;
 }
 .messaging { padding: 0 0 50px 0;}
 .msg_history {
