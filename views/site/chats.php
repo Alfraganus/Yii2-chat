@@ -57,21 +57,23 @@ $isAdmin = User::getUserRole(Yii::$app->user->id);
                     <?php foreach ($messages as $message): ?>
                      <?php
                         $allow=false;
-                        if($message['active']==0 && $isAdmin == 'Admin') {
-                            $allow=true;
-                        } elseif ($message['active']==0 && $isAdmin != 'Admin') {
-                            $allow=false;
+                        $display = true;
+                        if($message['active']==0 && $isAdmin == 'Admin' ) {
+                            $allow = true;
+                        } elseif ($message['active']==0 && ($isGuest ||$isAdmin == 'User')) {
+                            $display = false;
                         }
+
                         ?>
                         <?php if ($isGuest || $isStranger==false): ?>
                             <?= Yii::$app->controller->renderPartial('_unauthorized_chat', [
                                 'message' => $message,
-                                'allow'=>$allow
                             ]); ?>
                         <?php else: ?>
                             <?= Yii::$app->controller->renderPartial('_authorized_chat', [
                                 'message' => $message,
-                                'allow'=>$allow
+                                'allow'=>$allow,
+                                'display'=>$display
                             ]); ?>
 
                         <?php endif; ?>
