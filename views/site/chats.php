@@ -1,12 +1,15 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $model = new \app\models\Chat();
 $chatModel = new \app\models\ChatMessage();
 $chatId = Yii::$app->request->get('chat');
+$isGuest = Yii::$app->user->isGuest;
+$isStranger = $chatModel::checkTyper(Yii::$app->user->id,$chatId);
+$isAdmin = User::getUserRole(Yii::$app->user->id);
 ?>
-
 <div class="container">
     <h3 class=" text-center">Messaging</h3>
 
@@ -21,6 +24,7 @@ $chatId = Yii::$app->request->get('chat');
 
                 </div>
                 <div class="inbox_chat">
+                    <?php if (!$isGuest): ?>
                     <?php $form = ActiveForm::begin(['action'=>['chat/start-chat']]); ?>
                     <div class="row">
                         <div class="col-lg-8">
@@ -31,6 +35,7 @@ $chatId = Yii::$app->request->get('chat');
                         </div>
                     </div>
                     <?php ActiveForm::end(); ?>
+                    <?php endif; ?>
                     <?php foreach ($chats as $chat):  ?>
                         <a  href="<?=\yii\helpers\Url::to(['chats','chat'=>$chat['id']])?>">
                         <div class="chat_list <?=$chat['id']==$chatId?'active_chat':''?>">
@@ -50,29 +55,31 @@ $chatId = Yii::$app->request->get('chat');
             <div class="mesgs" style="display: <?=$chatId?'':'none'?>">
                 <div class="msg_history">
                     <?php foreach ($messages as $message): ?>
-                    <?php $messageId = $message['id']; ?>
-                    <?php if($message->user_id==Yii::$app->user->id): ?>
-                            <div class="outgoing_msg">
-                                <div class="sent_msg">
-                                    <p><?=$message['message']?></p>
-                                    <span class="time_date"> 11:01 AM    |    June 9</span> </div>
-                            </div>
-                    <?php else: ?>
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                        <p><?=$message['message']?></p>
-                                        <span class="time_date"> 11:01 AM    |    June 9</span></div>
-                                </div>
-                            </div>
-                    <?php endif; ?>
-                    <?php endforeach; ?>
+                     <?php
+                        $allow=false;
+                        if($message['active']==0 && $isAdmin == 'Admin') {
+                            $allow=true;
+                        } elseif ($message['active']==0 && $isAdmin != 'Admin') {
+                            $allow=false;
+                        }
+                        ?>
+                        <?php if ($isGuest || $isStranger==false): ?>
+                            <?= Yii::$app->controller->renderPartial('_unauthorized_chat', [
+                                'message' => $message,
+                                'allow'=>$allow
+                            ]); ?>
+                        <?php else: ?>
+                            <?= Yii::$app->controller->renderPartial('_authorized_chat', [
+                                'message' => $message,
+                                'allow'=>$allow
+                            ]); ?>
 
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
                 <?php $form = ActiveForm::begin(['action'=>['chat/write-chat']]); ?>
                 <div class="type_msg">
-                    <?php $isGuest = Yii::$app->user->isGuest; ?>
+
                     <div class="input_msg_write">
                         <?= $form->field($chatModel, 'message')->textInput([
                             'class' => 'write_msg',

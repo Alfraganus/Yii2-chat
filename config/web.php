@@ -72,8 +72,9 @@ $config = [
             'site/*',
             'chat/*',
             'gii/*',
-            'admin/*',
+//            'admin/*',
             'user/*',
+            'edit-message/*',
             'some-controller/some-action',
 
         ]

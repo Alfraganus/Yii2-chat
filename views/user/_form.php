@@ -10,8 +10,8 @@ use yii\widgets\ActiveForm;
 $roles = Yii::$app->authManager->getRoles();
 $defaultValue = [];
 if(!$model->isNewRecord) {
-   $getRole= Yii::$app->authManager->getRolesByUser($model->id);
-    $defaultValue = ['options'=>[array_keys($getRole)[0]=>['Selected'=>true]]];
+   $role= \app\models\User::getUserRole($model->id);
+    $defaultValue = ['options'=>[$role=>['Selected'=>true]]];
 }
 ?>
 

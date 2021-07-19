@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Chat;
 use app\models\ChatMessage;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -65,11 +66,30 @@ class ChatController extends Controller
      {
          $model = new ChatMessage();
          if ($model->load(Yii::$app->request->post()) && $model->message !='') {
-            $model->owner ='sender';
-            $model->user_id =Yii::$app->user->id;
-            $model->time = time();
-            $model->save(false);
+             $isAdmin = User::getUserRole(Yii::$app->user->id);
+             if ($isAdmin !='Admin' && $model::checkTyper(Yii::$app->user->id,$model->chat_id)==false) {
+                 Yii::$app->session->setFlash('danger', "You are not participated in chat, you can only write in your chat!");
+                 return $this->redirect(Yii::$app->request->referrer);
+             }
+             $model->user_id =Yii::$app->user->id;
+             $model->time = time();
+                 if($isAdmin=='Admin') {
+                     $owner = 'Admin';
+                 } else {
+                     $owner= ChatMessage::checkTyper($model->user_id,$model->chat_id);
+                 }
+             $model->owner =$owner;
+             $model->save(false);
          }
+         return $this->redirect(Yii::$app->request->referrer);
+     }
+
+     public function actionMarkIncorrectMessage($message_id,$chat_id)
+     {
+         $getMessage = ChatMessage::findOne(['chat_id'=>$chat_id,'id'=>$message_id]);
+         $getMessage->active=0;
+         $getMessage->save(false);
+         Yii::$app->session->setFlash('warning', "The message has been marked as Incorrect!");
          return $this->redirect(Yii::$app->request->referrer);
      }
 

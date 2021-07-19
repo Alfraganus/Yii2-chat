@@ -18,6 +18,7 @@ class m210717_062049_create_chat_message_table extends Migration
             'message'=>$this->text()->null(),
             'owner'=> 'ENUM(`sender`, `receiver`)',
             'user_id'=> $this->integer()->null(),
+            'active'=> $this->integer()->null(),
             'time'=>$this->integer()->null()
         ]);
         $this->addForeignKey(

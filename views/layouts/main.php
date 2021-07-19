@@ -40,6 +40,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Chats', 'url' => ['/site/chats']],
+            ['label' => 'Edit incorrect messages', 'url' => ['/edit-message']],
             ['label' => 'Users', 'url' => ['/user/']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

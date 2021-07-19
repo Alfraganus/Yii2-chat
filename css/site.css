@@ -79,6 +79,21 @@ img{ max-width:100%;}
     padding: 5px 10px 5px 12px;
     width: 100%;
 }
+.incorrect_received_msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    width: 92%;
+}
+.incorrect_received_msg p {
+    background: #e55e53 none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #fcfafa;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+}
 .time_date {
     color: #747474;
     display: block;
@@ -91,7 +106,22 @@ img{ max-width:100%;}
     padding: 30px 15px 0 25px;
     width: 60%;
 }
-
+.incorrect_msg_sender{
+    background: #e55e53 none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0; color:#fff;
+    padding: 5px 10px 5px 12px;
+    width:100%;
+}
+.incorrect_msg_sender {
+    float: right;
+    width: 46%;
+}
+.incorrect_msg_receiver {
+    float: left;
+    width: 46%;
+}
 .sent_msg p {
     background: #05728f none repeat scroll 0 0;
     border-radius: 3px;
@@ -104,6 +134,17 @@ img{ max-width:100%;}
 .sent_msg {
     float: right;
     width: 46%;
+}
+.admin_msg {
+    width: 100%;
+}
+.admin_msg p {
+    background: #eac910 none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0; color:#fff;
+    padding: 5px 10px 5px 12px;
+    width:100%;
 }
 .input_msg_write input {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
