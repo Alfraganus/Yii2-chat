@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Chat;
 use app\models\ChatMessage;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -80,10 +81,12 @@ class SiteController extends Controller
             ->where(['chat_id'=>$chat])
             ->orderBy('time ASC')
             ->all();
+        $getUsers = User::find()->where(['status'=>10])->all();
 
         return $this->render('chats',[
             'chats'=>$chats,
             'messages'=>$messages,
+            'getUsers'=>$getUsers,
         ]);
     }
 

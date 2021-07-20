@@ -64,20 +64,24 @@ class ChatController extends Controller
 
      public function actionWriteChat()
      {
+         $user_id = Yii::$app->user->id;
          $model = new ChatMessage();
          if ($model->load(Yii::$app->request->post()) && $model->message !='') {
-             $isAdmin = User::getUserRole(Yii::$app->user->id);
+             $isAdmin = User::getUserRole($user_id);
              if ($isAdmin !='Admin' && $model::checkTyper(Yii::$app->user->id,$model->chat_id)==false) {
                  Yii::$app->session->setFlash('danger', "You are not participated in chat, you can only write in your chat!");
                  return $this->redirect(Yii::$app->request->referrer);
+             } elseif($isAdmin =='Admin' && $model::checkTyper(Yii::$app->user->id,$model->chat_id)==false) {
+                 $owner = 'Admin';
              }
-             $model->user_id =Yii::$app->user->id;
+             elseif($isAdmin =='Admin' && $model::checkTyper(Yii::$app->user->id,$model->chat_id)!=false) {
+                 $owner = 'Admin';
+             }
+             elseif($isAdmin =='User') {
+                 $owner= ChatMessage::checkTyper($user_id,$model->chat_id);
+             }
+             $model->user_id =$user_id;
              $model->time = time();
-                 if($isAdmin=='Admin') {
-                     $owner = 'Admin';
-                 } else {
-                     $owner= ChatMessage::checkTyper($model->user_id,$model->chat_id);
-                 }
              $model->owner =$owner;
              $model->save(false);
          }

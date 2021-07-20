@@ -28,7 +28,7 @@ $isAdmin = User::getUserRole(Yii::$app->user->id);
                     <?php $form = ActiveForm::begin(['action'=>['chat/start-chat']]); ?>
                     <div class="row">
                         <div class="col-lg-8">
-                            <?= $form->field($model, 'sender_id')->dropDownList([1=>'Alfra'])->label(false) ?>
+                            <?= $form->field($model, 'sender_id')->dropDownList(\yii\helpers\ArrayHelper::map($getUsers,'id','username'))->label(false) ?>
                         </div>
                         <div class="col-lg-4">
                             <button class="btn btn-primary pull-right">Create new chat</button>
@@ -89,7 +89,9 @@ $isAdmin = User::getUserRole(Yii::$app->user->id);
                             'placeholder' => $isGuest ? 'You should log in to type' : 'Type a message'
                         ])->label(false) ?>
                         <?= $form->field($chatModel, 'chat_id')->hiddenInput(['value'=>$chatId])->label(false) ?>
+                       <?php if(!$isGuest):?>
                         <button class="msg_send_btn" type="submit">Send<i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                       <?php endif; ?>
                     </div>
                 </div>
                 <?php ActiveForm::end(); ?>

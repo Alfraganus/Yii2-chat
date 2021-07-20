@@ -72,10 +72,10 @@ class ChatMessage extends \yii\db\ActiveRecord
     public static function checkTyper($user_id,$chat_id)
     {
         $typer = null;
-        $chatUsername = Chat::find()->where(['id'=>$chat_id]);
-        if($chatUsername->andWhere(['sender_id'=>$user_id])->exists()) {
+        $chatUsername = Chat::find();
+        if($chatUsername->where(['id'=>$chat_id])->andWhere(['sender_id'=>$user_id])->exists()) {
             $typer = 'sender';
-        } elseif ($chatUsername->andWhere(['receiver_id'=>$user_id])->exists()) {
+        } elseif ($chatUsername->where(['id'=>$chat_id])->andWhere(['receiver_id'=>$user_id])->exists()) {
             $typer = 'receiver';
         } else {
             return false;
