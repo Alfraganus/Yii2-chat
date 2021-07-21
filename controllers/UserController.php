@@ -8,6 +8,7 @@ use app\models\User;
 use mdm\admin\models\form\Signup;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,10 +24,16 @@ class UserController extends \mdm\admin\controllers\UserController
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['view','index', 'create','update','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['view','index', 'create','update','delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+
                 ],
             ],
         ];
@@ -70,6 +77,7 @@ class UserController extends \mdm\admin\controllers\UserController
     public function actionCreate()
     {
         $model = new User();
+        $model->scenario = User::SCENARIO_CREATE;
         $authManager = Yii::$app->authManager;
         if ($model->load(Yii::$app->getRequest()->post())) {
             if ($user = $model->signup()) {

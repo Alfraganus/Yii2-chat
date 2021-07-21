@@ -14,6 +14,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 5;
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
+    const SCENARIO_CREATE = 'create';
     public $role;
     public $password;
     public $retypePassword;
@@ -34,9 +35,9 @@ class User extends ActiveRecord implements IdentityInterface
             [['username', 'password'], 'string', 'max' => 255],
             [['role'],'safe'],
             [['email'],'email'],
-            ['password', 'required'],
+            ['password', 'required','on' => self::SCENARIO_CREATE],
             ['password', 'string', 'min' => 6],
-            ['retypePassword', 'required'],
+            ['retypePassword', 'required','on' => self::SCENARIO_CREATE],
             ['retypePassword', 'compare', 'compareAttribute' => 'password'],
 
         ];

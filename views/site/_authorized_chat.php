@@ -13,7 +13,7 @@ $isAdmin = User::getUserRole(Yii::$app->user->id);
                     Mark as Incorrect <i class="glyphicon glyphicon-ban-circle"></i></a>
             <?php endif; ?>
             <p><?= $message['message'] ?></p>
-            <span class="time_date"><?= date('H:i d-M', strtotime($message['time'])) ?></span></div>
+            <span class="time_date"><?= date('H:i d-M', $message['time']) ?></span></div>
     </div>
 <?php elseif ($message['user_id'] != $user_id && $message['owner'] != 'admin'): ?>
     <div class="incoming_msg <?=!$display?'block':''?>">
@@ -25,14 +25,14 @@ $isAdmin = User::getUserRole(Yii::$app->user->id);
             <?php endif; ?>
             <div class="received_withd_msg">
                 <p><?= $message['message'] ?></p>
-                <span class="time_date"><?= date('H:i d-M', strtotime($message['time'])) ?></span></div>
+                <span class="time_date"><?= date('H:i d-M', $message['time']) ?></span></div>
         </div>
     </div>
 <?php else: ?>
     <div class="outgoing_msg">
         <div class="admin_msg">
             <p><?= $message['message'] ?></p>
-            <span class="time_date"><?= date('H:i d-M', strtotime($message['time'])) ?> (by admin)</span></div>
+            <span class="time_date"><?= date('H:i d-M', $message['time']) ?> (by admin)</span></div>
     </div>
 
 <?php endif; ?>

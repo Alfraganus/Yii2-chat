@@ -1,5 +1,6 @@
 <?php
 
+use app\models\ChatMessage;
 use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -42,8 +43,8 @@ $isAdmin = User::getUserRole(Yii::$app->user->id);
                             <div class="chat_people">
                                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                                 <div class="chat_ib">
-                                    <h5><?=\app\models\ChatMessage::getChatterName($chat['sender_id']) ?> <span class="chat_date">Dec 25</span></h5>
-                                    <p><?=\app\models\ChatMessage::getLastMessage($chat['id'])?></p>
+                                    <h5><?=ChatMessage::getChatterName($chat['sender_id']) ?> <span class="chat_date"><?=ChatMessage::getLastChatTime($chat['id'])?></span></h5>
+                                    <p><?=ChatMessage::getLastMessage($chat['id'])?></p>
                                 </div>
                             </div>
                         </div>

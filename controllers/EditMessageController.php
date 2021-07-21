@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\ChatMessage;
 use app\models\ChatMessageSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,10 +21,16 @@ class EditMessageController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['view','index', 'update','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['view','index', 'update','delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+
                 ],
             ],
         ];

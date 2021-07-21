@@ -58,9 +58,22 @@ class ChatMessage extends \yii\db\ActiveRecord
         $chatMessage = ChatMessage::find()
             ->where(['chat_id'=>$chat_id])
             ->andWhere(['active'=>1])
-            ->orderBy('time DESC')
+            ->orderBy('id DESC')
             ->one();
         return $chatMessage->message??'';
+    }
+
+    public static function getLastChatTime($chat_id)
+    {
+        $chatMessage = ChatMessage::find()
+            ->where(['chat_id'=>$chat_id])
+            ->orderBy('time DESC')
+            ->one();
+        if(!empty($chatMessage->time)) {
+            return date('D | H:i',$chatMessage->time);
+        } else {
+            return '';
+        }
     }
 
     public static function getChatterName($user_id)
