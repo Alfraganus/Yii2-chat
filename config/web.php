@@ -69,14 +69,6 @@ $config = [
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
-            'site/*',
-            'chat/*',
-            'gii/*',
-//            'admin/*',
-            'user/*',
-            'edit-message/*',
-            'some-controller/some-action',
-
         ]
     ],
     'params' => $params,

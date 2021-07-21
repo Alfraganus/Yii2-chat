@@ -83,9 +83,9 @@ class ChatMessage extends \yii\db\ActiveRecord
         $sender = Chat::find()->where(['id' => $chat_id])->andWhere(['sender_id' => $user_id]);
         $receiver = Chat::find()->where(['id' => $chat_id])->andWhere(['receiver_id' => $user_id]);
         if ($sender->exists()) {
-            $name = $sender->one()->sender->username;
+            $name = $sender->one()->receiver->username;
         } elseif ($receiver->exists()) {
-            $name = $receiver->one()->receiver->username;
+            $name = $receiver->one()->sender->username;
         } else {
             $chat = Chat::find()->where(['id' => $chat_id])->one();
             $name = $chat->sender->username;

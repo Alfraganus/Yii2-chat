@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use app\models\User;
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -11,6 +12,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+$isAdmin = User::getUserRole(Yii::$app->user->id);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -41,9 +43,11 @@ AppAsset::register($this);
             $menuItems[] = ['label' => 'Chats', 'url' => ['/site/chats']];
             $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
         } else {
+            if($isAdmin == 'Admin') {
+                $menuItems[] =  ['label' => 'Edit incorrect messages', 'url' => ['/edit-message']];
+                $menuItems[] =  ['label' => 'Users', 'url' => ['/user/']];
+            }
             $menuItems[] = ['label' => 'Chats', 'url' => ['/site/chats']];
-            $menuItems[] =  ['label' => 'Edit incorrect messages', 'url' => ['/edit-message']];
-            $menuItems[] =  ['label' => 'Users', 'url' => ['/user/']];
             $menuItems[] = [
                 'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
                 'url' => ['/site/logout'],
