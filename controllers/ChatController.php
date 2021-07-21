@@ -54,8 +54,6 @@ class ChatController extends Controller
             } else {
                 $model->receiver_id = Yii::$app->user->id;
                 $model->save(false);
-                $chatMessage->chat_id = $model->id;
-                $chatMessage->save(false);
             }
 
         }

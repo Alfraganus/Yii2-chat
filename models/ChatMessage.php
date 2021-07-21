@@ -76,10 +76,21 @@ class ChatMessage extends \yii\db\ActiveRecord
         }
     }
 
-    public static function getChatterName($user_id)
+
+
+    public static function getChatterName($user_id,$chat_id)
     {
-        $chatUsername = User::find()->where(['id'=>$user_id])->one();
-        return $chatUsername->username??'Username not found!';
+        $sender = Chat::find()->where(['id' => $chat_id])->andWhere(['sender_id' => $user_id]);
+        $receiver = Chat::find()->where(['id' => $chat_id])->andWhere(['receiver_id' => $user_id]);
+        if ($sender->exists()) {
+            $name = $sender->one()->sender->username;
+        } elseif ($receiver->exists()) {
+            $name = $receiver->one()->receiver->username;
+        } else {
+            $chat = Chat::find()->where(['id' => $chat_id])->one();
+            $name = $chat->sender->username;
+        }
+        return $name;
     }
 
     public static function checkTyper($user_id,$chat_id)

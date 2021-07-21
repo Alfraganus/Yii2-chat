@@ -9,7 +9,8 @@ $chatModel = new \app\models\ChatMessage();
 $chatId = Yii::$app->request->get('chat');
 $isGuest = Yii::$app->user->isGuest;
 $isStranger = $chatModel::checkTyper(Yii::$app->user->id,$chatId);
-$isAdmin = User::getUserRole(Yii::$app->user->id);
+$user_id =Yii::$app->user->id;
+$isAdmin = User::getUserRole($user_id);
 ?>
 <div class="container">
     <h3 class=" text-center">Messaging</h3>
@@ -43,7 +44,7 @@ $isAdmin = User::getUserRole(Yii::$app->user->id);
                             <div class="chat_people">
                                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                                 <div class="chat_ib">
-                                    <h5><?=ChatMessage::getChatterName($chat['sender_id']) ?> <span class="chat_date"><?=ChatMessage::getLastChatTime($chat['id'])?></span></h5>
+                                    <h5><?=ChatMessage::getChatterName($user_id,$chat['id']) ?> <span class="chat_date"><?=ChatMessage::getLastChatTime($chat['id'])?></span></h5>
                                     <p><?=ChatMessage::getLastMessage($chat['id'])?></p>
                                 </div>
                             </div>
